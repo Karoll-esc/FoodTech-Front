@@ -43,19 +43,16 @@ export interface CreateProductRequest {
   type: ProductType;
   price: number;
   preparationTimeSeconds: number;
-  available?: boolean;
-  imageUrl?: string;
+
 }
 
 /**
  * Request para actualizar un producto (Admin)
+ * Solo permite actualizar description, price y preparationTimeSeconds
+ * Name y type no se pueden cambiar después de la creación
  */
 export interface UpdateProductRequest {
-  name?: string;
   description?: string;
-  type?: ProductType;
   price?: number;
   preparationTimeSeconds?: number;
-  available?: boolean;
-  imageUrl?: string;
 }
