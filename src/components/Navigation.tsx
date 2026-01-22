@@ -1,6 +1,9 @@
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 export function Navigation() {
+  const { user, logout } = useAuth();
+  
   const navLinks = [
     { path: '/mesero', label: 'Mesero', icon: 'restaurant_menu' },
     { path: '/barra', label: 'Barra', icon: 'local_bar' },
@@ -40,6 +43,21 @@ export function Navigation() {
               <span className="hidden md:inline">{link.label}</span>
             </NavLink>
           ))}
+          
+          {/* User Info & Logout */}
+          <div className="ml-4 flex items-center gap-3 pl-4 border-l border-white/10">
+            <div className="text-right hidden md:block">
+              <p className="text-sm text-white-text font-medium">{user?.name}</p>
+              <p className="text-xs text-silver-text">{user?.email}</p>
+            </div>
+            <button
+              onClick={logout}
+              className="px-3 py-2 rounded-lg text-sm text-silver-text hover:text-white-text hover:bg-red-900/20 transition-all flex items-center gap-2"
+            >
+              <span className="material-symbols-outlined text-lg">logout</span>
+              <span className="hidden md:inline">Salir</span>
+            </button>
+          </div>
         </div>
       </div>
     </nav>
