@@ -4,7 +4,7 @@ import { TaskList } from '../components/kitchen/TaskList';
 import { useStationTasks } from '../hooks/useStationTasks';
 import { Station } from '../models/Task';
 
-export function BarView() {
+export function SandwichStationView() {
   const {
     tasks,
     selectedStatus,
@@ -14,13 +14,13 @@ export function BarView() {
     startingTaskId,
     startTaskPreparation,
     taskCounts
-  } = useStationTasks(Station.BAR);
+  } = useStationTasks(Station.SANDWICH_STATION);
 
   return (
     <StationLayout
-      stationName="Estación Barra"
-      stationCode="BAR • Bebidas y Cócteles"
-      icon="local_bar"
+      stationName="Estación Sandwiches"
+      stationCode="SANDWICH_STATION • Sandwiches y Bocadillos"
+      icon="lunch_dining"
     >
       {/* Filtros */}
       <TaskStatusFilter
