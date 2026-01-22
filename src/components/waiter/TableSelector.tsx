@@ -3,8 +3,8 @@ import { TableCard } from './TableCard';
 
 interface TableSelectorProps {
   tables: Table[];
-  selectedTableId: string | null;
-  onSelectTable: (tableId: string) => void;
+  selectedTableId: number | null;
+  onSelectTable: (tableId: number) => void;
 }
 
 /**

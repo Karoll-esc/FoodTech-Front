@@ -4,20 +4,20 @@ import { TableStatus } from '../../models/Table';
 interface TableCardProps {
   table: Table;
   isSelected: boolean;
-  onSelect: (tableId: string) => void;
+  onSelect: (tableId: number) => void;
 }
 
 /**
  * Tarjeta de mesa individual
  */
 export const TableCard = ({ table, isSelected, onSelect }: TableCardProps) => {
-  const isOccupied = table.status === TableStatus.OCUPADA;
+  const isOccupied = table.status === TableStatus.OCCUPIED;
 
   return (
     <div
-      data-testid={`table-card-${table.number}`}
+      data-testid={`table-card-${table.tableNumber}`}
       data-table-id={table.id}
-      data-table-number={table.number}
+      data-table-number={table.tableNumber}
       data-table-status={table.status}
       onClick={() => !isOccupied && onSelect(table.id)}
       className={`
@@ -33,7 +33,7 @@ export const TableCard = ({ table, isSelected, onSelect }: TableCardProps) => {
       `}
     >
       <span
-        data-testid={`table-number-${table.number}`}
+        data-testid={`table-number-${table.tableNumber}`}
         className={`text-[10px] font-bold ${
           isOccupied
             ? 'text-red-400'
@@ -42,10 +42,10 @@ export const TableCard = ({ table, isSelected, onSelect }: TableCardProps) => {
             : 'text-silver-text'
         }`}
       >
-        {table.number}
+        {table.tableNumber}
       </span>
       <span
-        data-testid={`table-status-${table.number}`}
+        data-testid={`table-status-${table.tableNumber}`}
         className={`text-sm font-bold ${
           isOccupied
             ? 'text-red-300'
