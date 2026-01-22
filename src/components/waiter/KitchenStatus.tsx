@@ -4,11 +4,14 @@ import { TaskStatus, Station } from '../../models/Task';
 import { orderService } from '../../services/orderService';
 import type { OrderStatusResponse } from '../../models/Order';
 import { OrderStatus } from '../../models/Order';
+import type { Table } from '../../models/Table';
 
 interface KitchenStatusProps {
   tasks: Task[];
   isLoading: boolean;
   onRefresh: () => void;
+  onMarkAsServed?: (tableNumber: string) => void;
+  tables?: Table[];
 }
 
 interface OrderGroup {
@@ -25,6 +28,8 @@ export const KitchenStatus = ({
   tasks,
   isLoading,
   onRefresh,
+  onMarkAsServed,
+  tables,
 }: KitchenStatusProps) => {
   const [orderStatuses, setOrderStatuses] = useState<Map<number, OrderStatusResponse>>(new Map());
 
@@ -81,8 +86,8 @@ export const KitchenStatus = ({
    * Calcula el progreso de una orden basado en las estaciones
    */
   const calculateProgress = (orderTasks: Task[]): number => {
-    const stationsCount = 3; // BAR, HOT_KITCHEN, COLD_KITCHEN
-    const stations = [Station.BAR, Station.HOT_KITCHEN, Station.COLD_KITCHEN];
+    const stationsCount = 3; // ESPRESSO_BAR, PASTRY_STATION, SANDWICH_STATION
+    const stations = [Station.ESPRESSO_BAR, Station.PASTRY_STATION, Station.SANDWICH_STATION];
     
     let completedStations = 0;
     
@@ -207,16 +212,29 @@ export const KitchenStatus = ({
 
                 {/* Lista de Productos */}
                 <div data-testid="kitchen-order-products" className="flex flex-wrap gap-1 mb-3">
-                  {group.tasks.flatMap((task) => task.products).map((product, idx) => (
-                    <span
-                      key={idx}
-                      data-testid={`kitchen-product-${idx}`}
-                      data-product-name={product.name}
-                      className="text-[10px] bg-white/5 px-2 py-1 rounded text-silver-text"
-                    >
-                      {product.name}
-                    </span>
-                  ))}
+                  {group.tasks.map((task) =>
+                    task.products.map((product, idx) => {
+                      const isCompleted = task.status === TaskStatus.COMPLETED;
+                      const isInProgress = task.status === TaskStatus.IN_PREPARATION;
+                      return (
+                        <span
+                          key={`${task.id}-${idx}`}
+                          data-testid={`kitchen-product-${task.id}-${idx}`}
+                          data-product-name={product.name}
+                          data-task-status={task.status}
+                          className={`text-[10px] px-2 py-1 rounded transition-all duration-300 ${
+                            isCompleted
+                              ? 'bg-primary/20 text-primary border border-primary/30 line-through'
+                              : isInProgress
+                              ? 'bg-primary/10 text-white-text border border-primary/20 animate-pulse'
+                              : 'bg-white/5 text-silver-text border border-transparent'
+                          }`}
+                        >
+                          {product.name}
+                        </span>
+                      );
+                    })
+                  )}
                 </div>
 
                 {/* Barra de Progreso */}
@@ -238,9 +256,27 @@ export const KitchenStatus = ({
 
                 {/* Mensaje para orden completada */}
                 {group.orderStatus?.status === OrderStatus.COMPLETED && (
-                  <p data-testid="kitchen-order-completed-msg" className="text-[10px] text-silver-text">
-                    Recoger en estación de entrega
-                  </p>
+                  <div className="space-y-2">
+                    <p data-testid="kitchen-order-completed-msg" className="text-[10px] text-silver-text">
+                      Orden lista para servir
+                    </p>
+                    {onMarkAsServed && tables &&
+                      (() => {
+                        const mesa = tables.find(t => t.tableNumber === group.tableNumber);
+                        return mesa && mesa.status === 'OCCUPIED' ? (
+                          <button
+                            onClick={() => onMarkAsServed(group.tableNumber)}
+                            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary/20 hover:bg-primary/30 border border-primary/30 rounded-lg text-primary font-semibold text-sm transition-all"
+                          >
+                            <span className="material-symbols-outlined text-sm">
+                              room_service
+                            </span>
+                            Servir Mesa {group.tableNumber}
+                          </button>
+                        ) : null;
+                      })()
+                    }
+                  </div>
                 )}
 
                 {/* Mensaje para orden en cola */}
