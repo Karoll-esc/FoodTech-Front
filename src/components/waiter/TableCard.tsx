@@ -11,7 +11,13 @@ interface TableCardProps {
  * Tarjeta de mesa individual
  */
 export const TableCard = ({ table, isSelected, onSelect }: TableCardProps) => {
-  const isOccupied = table.status === TableStatus.OCCUPIED;
+  const isAvailable = table.status === TableStatus.AVAILABLE;
+  const statusLabels: Record<string, string> = {
+    [TableStatus.AVAILABLE]: 'Disponible',
+    [TableStatus.OCCUPIED]: 'Ocupada',
+    [TableStatus.SERVED]: 'Servida',
+    [TableStatus.CLEANING]: 'Limpieza',
+  };
 
   return (
     <div
@@ -19,12 +25,12 @@ export const TableCard = ({ table, isSelected, onSelect }: TableCardProps) => {
       data-table-id={table.id}
       data-table-number={table.tableNumber}
       data-table-status={table.status}
-      onClick={() => !isOccupied && onSelect(table.id)}
+      onClick={() => isAvailable && onSelect(table.id)}
       className={`
         p-3 rounded-xl flex flex-col items-center justify-center gap-1 
         transition-all
         ${
-          isOccupied
+          !isAvailable
             ? 'bg-gradient-to-br from-red-900/40 to-red-800/30 border border-red-700/50 cursor-not-allowed opacity-75'
             : isSelected
             ? 'glass-panel-dark border-primary/40 cursor-pointer'
@@ -35,7 +41,7 @@ export const TableCard = ({ table, isSelected, onSelect }: TableCardProps) => {
       <span
         data-testid={`table-number-${table.tableNumber}`}
         className={`text-[10px] font-bold ${
-          isOccupied
+          !isAvailable
             ? 'text-red-400'
             : isSelected
             ? 'text-primary'
@@ -47,19 +53,19 @@ export const TableCard = ({ table, isSelected, onSelect }: TableCardProps) => {
       <span
         data-testid={`table-status-${table.tableNumber}`}
         className={`text-sm font-bold ${
-          isOccupied
+          !isAvailable
             ? 'text-red-300'
             : isSelected
             ? 'text-white-text'
             : 'text-silver-text'
         }`}
       >
-        {isOccupied ? 'Ocupada' : 'Disponible'}
+        {statusLabels[table.status]}
       </span>
       <div
         className={`w-1 h-1 rounded-full ${
-          isOccupied
-            ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'
+          isAvailable
+            ? 'bg-green-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'
             : isSelected
             ? 'bg-primary shadow-[0_0_8px_#C5A059]'
             : 'bg-white/20'

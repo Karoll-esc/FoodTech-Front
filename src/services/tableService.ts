@@ -30,7 +30,10 @@ class TableService {
    * Actualiza el estado de una mesa
    */
   async updateStatus(id: number, status: TableStatus): Promise<Table> {
-    return apiClient.patch<Table>(`/api/tables/${id}/status?status=${status}`);
+    return apiClient.patch<{ newStatus: TableStatus }, Table>(
+      `/api/tables/${id}/status`,
+      { newStatus: status }
+    );
   }
 
   /**
