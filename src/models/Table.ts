@@ -2,18 +2,31 @@
  * Estado de una mesa en el restaurante
  */
 export const TableStatus = {
-  DISPONIBLE: 'DISPONIBLE',
-  OCUPADA: 'OCUPADA',
+  AVAILABLE: 'AVAILABLE',
+  OCCUPIED: 'OCCUPIED',
+  SERVED: 'SERVED',
+  CLEANING: 'CLEANING',
 } as const;
 
 export type TableStatus = (typeof TableStatus)[keyof typeof TableStatus];
 
 /**
- * Modelo de mesa
+ * Modelo completo de mesa del backend
  */
 export interface Table {
-  id: string;
-  number: string;
+  id: number;
+  tableNumber: string;
+  capacity: number;
   status: TableStatus;
-  activeOrderId?: number;
+  activeOrderId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * Request para crear una mesa (Admin)
+ */
+export interface CreateTableRequest {
+  tableNumber: string;
+  capacity: number;
 }

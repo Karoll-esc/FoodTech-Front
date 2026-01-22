@@ -2,9 +2,9 @@
  * Estaciones de cocina
  */
 export const Station = {
-  BAR: 'BAR',
-  HOT_KITCHEN: 'HOT_KITCHEN',
-  COLD_KITCHEN: 'COLD_KITCHEN',
+  ESPRESSO_BAR: 'ESPRESSO_BAR',
+  PASTRY_STATION: 'PASTRY_STATION',
+  SANDWICH_STATION: 'SANDWICH_STATION',
 } as const;
 
 export type Station = (typeof Station)[keyof typeof Station];
@@ -27,6 +27,7 @@ export interface TaskProduct {
   name: string;
   type: string;
   quantity: number;
+  preparationTimeSeconds: number;
 }
 
 /**

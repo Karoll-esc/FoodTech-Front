@@ -3,21 +3,26 @@
  */
 export const ProductType = {
   DRINK: 'DRINK',
-  HOT_DISH: 'HOT_DISH',
-  COLD_DISH: 'COLD_DISH',
+  PASTRY: 'PASTRY',
+  SANDWICH: 'SANDWICH',
 } as const;
 
 export type ProductType = (typeof ProductType)[keyof typeof ProductType];
 
 /**
- * Modelo de producto del menú
+ * Modelo completo de producto del backend
  */
 export interface Product {
-  id: string;
+  id: number;
   name: string;
+  description: string;
   type: ProductType;
-  description?: string;
-  image?: string;
+  price: number;
+  preparationTimeSeconds: number;
+  available: boolean;
+  imageUrl?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 /**
@@ -27,4 +32,30 @@ export interface OrderProduct {
   name: string;
   type: ProductType;
   quantity: number;
+}
+
+/**
+ * Request para crear un producto (Admin)
+ */
+export interface CreateProductRequest {
+  name: string;
+  description: string;
+  type: ProductType;
+  price: number;
+  preparationTimeSeconds: number;
+  available?: boolean;
+  imageUrl?: string;
+}
+
+/**
+ * Request para actualizar un producto (Admin)
+ */
+export interface UpdateProductRequest {
+  name?: string;
+  description?: string;
+  type?: ProductType;
+  price?: number;
+  preparationTimeSeconds?: number;
+  available?: boolean;
+  imageUrl?: string;
 }
