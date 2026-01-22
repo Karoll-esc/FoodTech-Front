@@ -1,8 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import { WaiterView } from './views/WaiterView';
-import { HotKitchenView } from './views/HotKitchenView';
-import { BarView } from './views/BarView';
-import { ColdKitchenView } from './views/ColdKitchenView';
+import { PastryStationView } from './views/PastryStationView';
+import { EspressoBarView } from './views/EspressoBarView';
+import { SandwichStationView } from './views/SandwichStationView';
+import { ProductManagementView } from './views/admin/ProductManagementView';
+import { TableManagementView } from './views/admin/TableManagementView';
 import { Navigation } from './components/Navigation';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { useAuth } from './hooks/useAuth';
@@ -36,6 +39,29 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#1E1E2E',
+            color: '#F5F5F0',
+            border: '1px solid rgba(212, 175, 55, 0.2)',
+          },
+          success: {
+            iconTheme: {
+              primary: '#D4AF37',
+              secondary: '#1E1E2E',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#EF4444',
+              secondary: '#1E1E2E',
+            },
+          },
+        }}
+      />
       <Navigation />
       <div className="pt-16">
         <Routes>
@@ -49,26 +75,42 @@ function App() {
             } 
           />
           <Route 
-            path="/cocina-caliente" 
+            path="/estacion-reposteria" 
             element={
               <ProtectedRoute anyPermissions={['read:tasks', 'update:tasks:pastry-station']}>
-                <HotKitchenView />
+                <PastryStationView />
               </ProtectedRoute>
             } 
           />
           <Route 
-            path="/barra" 
+            path="/barra-espresso" 
             element={
               <ProtectedRoute anyPermissions={['read:tasks', 'admin:all']}>
-                <BarView />
+                <EspressoBarView />
               </ProtectedRoute>
             } 
           />
           <Route 
-            path="/cocina-fria" 
+            path="/estacion-sandwiches" 
             element={
               <ProtectedRoute anyPermissions={['read:tasks', 'update:tasks:sandwich-station']}>
-                <ColdKitchenView />
+                <SandwichStationView />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/productos" 
+            element={
+              <ProtectedRoute requiredPermission="admin:all">
+                <ProductManagementView />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/mesas" 
+            element={
+              <ProtectedRoute anyPermissions={['admin:all', 'update:tables']}>
+                <TableManagementView />
               </ProtectedRoute>
             } 
           />
