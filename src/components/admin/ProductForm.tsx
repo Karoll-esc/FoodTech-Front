@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Product, CreateProductRequest, UpdateProductRequest } from '../../models/Product';
 import { ProductType } from '../../models/Product';
+import { ImageUploader } from './ImageUploader';
 
 interface ProductFormProps {
   product: Product | null;
@@ -15,8 +16,10 @@ export function ProductForm({ product, onSubmit, onClose }: ProductFormProps) {
     type: product?.type || ProductType.DRINK,
     price: product?.price || 0,
     preparationTimeSeconds: product?.preparationTimeSeconds || 0,
+    imageUrl: product?.imageUrl || '',
   });
   const [submitting, setSubmitting] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,6 +31,7 @@ export function ProductForm({ product, onSubmit, onClose }: ProductFormProps) {
           description: formData.description,
           price: formData.price,
           preparationTimeSeconds: formData.preparationTimeSeconds,
+          imageUrl: formData.imageUrl || undefined,
         };
         await onSubmit(updateData);
       } else {
@@ -38,6 +42,7 @@ export function ProductForm({ product, onSubmit, onClose }: ProductFormProps) {
           type: formData.type,
           price: formData.price,
           preparationTimeSeconds: formData.preparationTimeSeconds,
+          imageUrl: formData.imageUrl || undefined,
         };
         await onSubmit(createData);
       }
@@ -151,32 +156,48 @@ export function ProductForm({ product, onSubmit, onClose }: ProductFormProps) {
               type="number"
               required
               min="0"
+              step="1"
               value={Math.floor(formData.preparationTimeSeconds / 60)}
-              onChange={(e) => handleChange('preparationTimeSeconds', parseInt(e.target.value) * 60)}
+              onChange={(e) => {
+                const minutes = parseInt(e.target.value) || 0;
+                handleChange('preparationTimeSeconds', minutes * 60);
+              }}
               className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white-text placeholder-silver-text focus:outline-none focus:border-primary"
               placeholder="5"
             />
             <p className="mt-1 text-xs text-silver-text">
-              Tiempo estimado para preparar este producto
+              Tiempo estimado para preparar este producto (se guardará en segundos: {formData.preparationTimeSeconds}s)
             </p>
           </div>
+
+          {/* Image Upload */}
+          <ImageUploader
+            imageUrl={formData.imageUrl}
+            onImageChange={(url) => handleChange('imageUrl', url)}
+            onUploadingChange={setImageUploading}
+          />
 
           {/* Actions */}
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
             <button
               type="button"
               onClick={onClose}
-              disabled={submitting}
+              disabled={submitting || imageUploading}
               className="px-6 py-2 border border-white/10 rounded-lg text-white-text hover:bg-white/5 transition-colors disabled:opacity-50"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || imageUploading}
               className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
-              {submitting ? (
+              {imageUploading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  Subiendo imagen...
+                </>
+              ) : submitting ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                   Guardando...

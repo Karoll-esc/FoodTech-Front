@@ -116,6 +116,16 @@ export const WaiterView = () => {
   };
 
   /**
+   * Maneja el incremento de cantidad de un producto ya en el pedido
+   */
+  const handleAddProductByName = (productName: string) => {
+    const product = products.find((p) => p.name === productName);
+    if (product) {
+      addProduct(product);
+    }
+  };
+
+  /**
    * Maneja el envío del pedido
    */
   const handleSubmitOrder = async () => {
@@ -282,6 +292,7 @@ export const WaiterView = () => {
               products={orderProducts}
               totalItems={totalItems}
               isSubmitting={isSubmitting}
+              onAddProduct={handleAddProductByName}
               onRemoveProduct={removeProduct}
               onSubmit={handleSubmitOrder}
             />

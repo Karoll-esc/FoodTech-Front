@@ -25,6 +25,8 @@ export function ProductManagementView() {
       const data = await productService.list();
       console.log('Productos recibidos del backend:', data);
       console.log('Cantidad de productos:', data.length);
+      console.log('🔍 Primer producto con detalles:', data[0]);
+      console.log('🖼️ URLs de imágenes:', data.map(p => ({ name: p.name, imageUrl: p.imageUrl })));
       setProducts(data);
     } catch (error) {
       toast.error('Error al cargar productos');
@@ -46,17 +48,21 @@ export function ProductManagementView() {
 
   const handleFormSubmit = async (data: any) => {
     try {
+      console.log('📤 Enviando producto al backend:', data);
       if (editingProduct) {
-        await productService.update(editingProduct.id, data);
+        const response = await productService.update(editingProduct.id, data);
+        console.log('📥 Respuesta del backend (update):', response);
         toast.success('Producto actualizado exitosamente');
       } else {
-        await productService.create(data);
+        const response = await productService.create(data);
+        console.log('📥 Respuesta del backend (create):', response);
         toast.success('Producto creado exitosamente');
       }
       setIsFormOpen(false);
       setEditingProduct(null);
       await fetchProducts();
     } catch (error: any) {
+      console.error('❌ Error al guardar producto:', error);
       toast.error(error.message || 'Error al guardar el producto');
     }
   };

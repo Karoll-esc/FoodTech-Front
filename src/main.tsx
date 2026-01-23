@@ -5,6 +5,7 @@ import './index.css';
 import App from './App.tsx';
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 import { registerAccessTokenProvider } from './services/apiClient';
+import { registerImageServiceTokenProvider } from './services/imageService';
 
 const domain = import.meta.env.VITE_AUTH0_DOMAIN;
 const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
@@ -24,14 +25,16 @@ export const AuthTokenBridge = ({ children }: { children: ReactNode }) => {
   const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
-    registerAccessTokenProvider(() =>
+    const tokenProvider = () =>
       getAccessTokenSilently({
         authorizationParams: {
           audience: audience ?? undefined,
           scope: requestedScope,
         },
-      })
-    );
+      });
+
+    registerAccessTokenProvider(tokenProvider);
+    registerImageServiceTokenProvider(tokenProvider);
   }, [getAccessTokenSilently]);
 
   return children;

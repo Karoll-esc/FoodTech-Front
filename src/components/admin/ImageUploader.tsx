@@ -1,11 +1,14 @@
 import { useState, useRef } from 'react';
+import { imageService } from '../../services/imageService';
+import toast from 'react-hot-toast';
 
 interface ImageUploaderProps {
   imageUrl: string;
   onImageChange: (url: string) => void;
+  onUploadingChange?: (uploading: boolean) => void;
 }
 
-export function ImageUploader({ imageUrl, onImageChange }: ImageUploaderProps) {
+export function ImageUploader({ imageUrl, onImageChange, onUploadingChange }: ImageUploaderProps) {
   const [preview, setPreview] = useState<string>(imageUrl);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -16,32 +19,38 @@ export function ImageUploader({ imageUrl, onImageChange }: ImageUploaderProps) {
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert('Por favor selecciona un archivo de imagen válido');
+      toast.error('Por favor selecciona un archivo de imagen válido');
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert('La imagen no debe superar los 5MB');
+      toast.error('La imagen no debe superar los 5MB');
       return;
     }
 
     setUploading(true);
+    onUploadingChange?.(true);
 
     try {
-      // Create preview
+      // Create local preview immediately
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64String = reader.result as string;
-        setPreview(base64String);
-        onImageChange(base64String);
+        setPreview(reader.result as string);
       };
       reader.readAsDataURL(file);
+
+      // Upload to S3
+      const s3Url = await imageService.uploadImage(file);
+      onImageChange(s3Url);
+      toast.success('Imagen subida exitosamente');
     } catch (error) {
       console.error('Error uploading image:', error);
-      alert('Error al cargar la imagen');
+      toast.error(error instanceof Error ? error.message : 'Error al cargar la imagen');
+      setPreview('');
     } finally {
       setUploading(false);
+      onUploadingChange?.(false);
     }
   };
 
