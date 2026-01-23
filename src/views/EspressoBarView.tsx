@@ -19,8 +19,8 @@ export function EspressoBarView() {
   return (
     <StationLayout
       stationName="Estación Barra Espresso"
-      stationCode="ESPRESSO_BAR • Bebidas y Café"
-      icon="local_bar"
+      stationCode="Bebidas y Café"
+      icon="coffee"
     >
       {/* Filtros */}
       <TaskStatusFilter

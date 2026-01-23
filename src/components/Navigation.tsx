@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { usePermissions } from '../hooks/usePermissions';
+import { usePermissions, type PermissionValue } from '../hooks/usePermissions';
 
 export function Navigation() {
   const { user, logout } = useAuth();
@@ -9,16 +9,35 @@ export function Navigation() {
   const navLinks = [
     { path: '/mesero', label: 'Mesero', icon: 'restaurant_menu', show: hasPermission('create:orders') },
     { path: '/barra-espresso', label: 'Espresso', icon: 'coffee', show: hasAnyPermission(['read:tasks', 'admin:all']) },
-    { path: '/estacion-reposteria', label: 'Repostería', icon: 'cake', show: hasAnyPermission(['read:tasks', 'update:tasks:pastry-station', 'admin:all']) },
+    { path: '/estacion-reposteria', label: 'Repostería', icon: 'bakery_dining', show: hasAnyPermission(['read:tasks', 'update:tasks:pastry-station', 'admin:all']) },
     { path: '/estacion-sandwiches', label: 'Sandwiches', icon: 'lunch_dining', show: hasAnyPermission(['read:tasks', 'update:tasks:sandwich-station', 'admin:all']) }
   ];
 
-  const adminLinks = [
-    { path: '/admin/productos', label: 'Productos', icon: 'inventory_2' },
-    { path: '/admin/mesas', label: 'Mesas', icon: 'table_restaurant' }
+  const adminLinks: Array<{
+    path: string;
+    label: string;
+    icon: string;
+    requiredPermissions: PermissionValue[];
+  }> = [
+    {
+      path: '/admin/productos',
+      label: 'Productos',
+      icon: 'inventory_2',
+      requiredPermissions: ['admin:all']
+    },
+    {
+      path: '/admin/mesas',
+      label: 'Mesas',
+      icon: 'table_restaurant',
+      requiredPermissions: ['admin:all']
+    }
   ];
 
-  const showAdmin = hasAnyPermission(['admin:all', 'update:tables']);
+  const visibleAdminLinks = adminLinks.filter(link =>
+    hasAnyPermission(link.requiredPermissions)
+  );
+
+  const showAdmin = visibleAdminLinks.length > 0;
 
   return (
     <nav className="fixed top-0 left-0 right-0 h-16 bg-charcoal border-b border-white/10 z-50">
@@ -64,7 +83,7 @@ export function Navigation() {
               
               {/* Dropdown */}
               <div className="absolute top-full right-0 mt-2 w-48 bg-charcoal/95 border border-white/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all backdrop-blur-md">
-                {adminLinks.map((link) => (
+                {visibleAdminLinks.map((link) => (
                   <NavLink
                     key={link.path}
                     to={link.path}

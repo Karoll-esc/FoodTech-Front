@@ -19,8 +19,8 @@ export function PastryStationView() {
   return (
     <StationLayout
       stationName="Estación Repostería"
-      stationCode="PASTRY_STATION • Pasteles y Postres"
-      icon="cake"
+      stationCode="Pasteles y Postres"
+      icon="bakery_dining"
     >
       {/* Filtros */}
       <TaskStatusFilter

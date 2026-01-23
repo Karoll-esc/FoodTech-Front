@@ -38,11 +38,11 @@ export function TaskCard({ task, onStartPreparation, isStarting = false }: TaskC
   const getProductIcon = (type: string) => {
     switch (type) {
       case ProductType.DRINK:
-        return 'local_bar';
-      case ProductType.HOT_DISH:
-        return 'local_fire_department';
-      case ProductType.COLD_DISH:
-        return 'ac_unit';
+        return 'coffee';
+      case ProductType.PASTRY:
+        return 'bakery_dining';
+      case ProductType.SANDWICH:
+        return 'lunch_dining';
       default:
         return 'restaurant';
     }

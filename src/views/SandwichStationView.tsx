@@ -19,7 +19,7 @@ export function SandwichStationView() {
   return (
     <StationLayout
       stationName="Estación Sandwiches"
-      stationCode="SANDWICH_STATION • Sandwiches y Bocadillos"
+      stationCode="Sandwiches y Bocadillos"
       icon="lunch_dining"
     >
       {/* Filtros */}

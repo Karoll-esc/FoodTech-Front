@@ -15,8 +15,8 @@ export const CategoryFilter = ({
   const categories: { key: ProductType | 'ALL'; label: string }[] = [
     { key: 'ALL', label: 'Todo el Menú' },
     { key: ProductType.DRINK, label: 'Bebidas' },
-    { key: ProductType.HOT_DISH, label: 'Platos Principales' },
-    { key: ProductType.COLD_DISH, label: 'Ensaladas' },
+    { key: ProductType.PASTRY, label: 'Repostería' },
+    { key: ProductType.SANDWICH, label: 'Sandwiches' },
   ];
 
   return (
