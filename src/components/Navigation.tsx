@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { usePermissions, type PermissionValue } from '../hooks/usePermissions';
 
+
 export function Navigation() {
   const { user, logout } = useAuth();
   const { hasPermission, hasAnyPermission } = usePermissions();
@@ -41,16 +42,14 @@ export function Navigation() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 h-16 bg-charcoal border-b border-white/10 z-50">
-      <div className="h-full px-8 flex items-center justify-between">
+      <div className="h-full px-6 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="size-10 gold-gradient rounded-lg flex items-center justify-center">
-            <span className="material-symbols-outlined text-midnight text-2xl font-bold">restaurant</span>
-          </div>
-          <div>
-            <h1 className="text-lg font-bold text-white-text">FoodTech</h1>
-            <p className="text-[10px] text-primary uppercase tracking-wider">Kitchen System</p>
-          </div>
+          <img
+            src="/logo.png"
+            alt="DASH Logo"
+            className="h-20 w-auto object-contain drop-shadow-lg"
+          />
         </div>
 
         {/* Nav Links */}
