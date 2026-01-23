@@ -31,7 +31,6 @@ export interface CreateOrderRequest {
  * Response al crear una orden
  */
 export interface CreateOrderResponse {
-  orderId: number;
   tableNumber: string;
   tasksCreated: number;
   message: string;
@@ -41,11 +40,6 @@ export interface CreateOrderResponse {
  * Response al consultar el estado de una orden
  */
 export interface OrderStatusResponse {
-  orderId: number;
-  tableNumber: string;
+  orderId: string;
   status: OrderStatus;
-  createdAt: string;
-  completedAt?: string;
-  totalTasks: number;
-  completedTasks: number;
 }

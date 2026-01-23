@@ -4,6 +4,7 @@ interface OrderSummaryProps {
   products: OrderProduct[];
   totalItems: number;
   isSubmitting: boolean;
+  onAddProduct: (productName: string) => void;
   onRemoveProduct: (productName: string) => void;
   onSubmit: () => void;
 }
@@ -15,6 +16,7 @@ export const OrderSummary = ({
   products,
   totalItems,
   isSubmitting,
+  onAddProduct,
   onRemoveProduct,
   onSubmit,
 }: OrderSummaryProps) => {
@@ -36,37 +38,44 @@ export const OrderSummary = ({
         <>
           <div data-testid="order-products-list" className="space-y-4 sm:space-y-6 max-h-[200px] sm:max-h-[250px] lg:max-h-[300px] overflow-y-auto order-scroll pr-2 sm:pr-4">
             {products.map((product) => (
-              <div 
+              <div
                 key={product.name}
                 data-testid={`order-item-${product.name.toLowerCase().replace(/\s+/g, '-')}`}
                 data-product-name={product.name}
-                className="flex justify-between items-start group"
+                className="flex justify-between items-center gap-3"
               >
                 <div className="flex-1">
-                  <div className="flex items-center gap-1 sm:gap-2">
-                    <span 
-                      data-testid="order-item-name"
-                      className="text-white-text text-sm sm:text-base font-bold"
-                    >
-                      {product.name}
-                    </span>
-                    <span 
-                      data-testid="order-item-quantity"
-                      className="text-primary text-xs sm:text-sm font-bold"
-                    >
-                      x{product.quantity}
-                    </span>
-                  </div>
-                </div>
-                <button
-                  data-testid={`remove-product-btn-${product.name.toLowerCase().replace(/\s+/g, '-')}`}
-                  onClick={() => onRemoveProduct(product.name)}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity text-silver-text hover:text-primary"
-                >
-                  <span className="material-symbols-outlined text-lg">
-                    remove_circle
+                  <span
+                    data-testid="order-item-name"
+                    className="text-white-text text-sm sm:text-base font-bold"
+                  >
+                    {product.name}
                   </span>
-                </button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    data-testid={`decrease-product-btn-${product.name.toLowerCase().replace(/\s+/g, '-')}`}
+                    onClick={() => onRemoveProduct(product.name)}
+                    className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-silver-text hover:text-red-400 transition-colors"
+                    title="Disminuir cantidad"
+                  >
+                    <span className="material-symbols-outlined text-base">remove</span>
+                  </button>
+                  <span
+                    data-testid="order-item-quantity"
+                    className="text-primary text-sm sm:text-base font-bold min-w-[2rem] text-center"
+                  >
+                    {product.quantity}
+                  </span>
+                  <button
+                    data-testid={`increase-product-btn-${product.name.toLowerCase().replace(/\s+/g, '-')}`}
+                    onClick={() => onAddProduct(product.name)}
+                    className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-silver-text hover:text-primary transition-colors"
+                    title="Aumentar cantidad"
+                  >
+                    <span className="material-symbols-outlined text-base">add</span>
+                  </button>
+                </div>
               </div>
             ))}
           </div>

@@ -4,7 +4,7 @@ import { TaskList } from '../components/kitchen/TaskList';
 import { useStationTasks } from '../hooks/useStationTasks';
 import { Station } from '../models/Task';
 
-export function HotKitchenView() {
+export function SandwichStationView() {
   const {
     tasks,
     selectedStatus,
@@ -14,13 +14,13 @@ export function HotKitchenView() {
     startingTaskId,
     startTaskPreparation,
     taskCounts
-  } = useStationTasks(Station.HOT_KITCHEN);
+  } = useStationTasks(Station.SANDWICH_STATION);
 
   return (
     <StationLayout
-      stationName="Estación Cocina Caliente"
-      stationCode="HOT_KITCHEN • Platos Principales"
-      icon="local_fire_department"
+      stationName="Estación Sandwiches"
+      stationCode="Sandwiches y Bocadillos"
+      icon="lunch_dining"
     >
       {/* Filtros */}
       <TaskStatusFilter

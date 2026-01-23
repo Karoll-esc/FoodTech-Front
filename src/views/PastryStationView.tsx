@@ -4,7 +4,7 @@ import { TaskList } from '../components/kitchen/TaskList';
 import { useStationTasks } from '../hooks/useStationTasks';
 import { Station } from '../models/Task';
 
-export function ColdKitchenView() {
+export function PastryStationView() {
   const {
     tasks,
     selectedStatus,
@@ -14,13 +14,13 @@ export function ColdKitchenView() {
     startingTaskId,
     startTaskPreparation,
     taskCounts
-  } = useStationTasks(Station.COLD_KITCHEN);
+  } = useStationTasks(Station.PASTRY_STATION);
 
   return (
     <StationLayout
-      stationName="Estación Cocina Fría"
-      stationCode="COLD_KITCHEN • Ensaladas y Postres"
-      icon="ac_unit"
+      stationName="Estación Repostería"
+      stationCode="Pasteles y Postres"
+      icon="bakery_dining"
     >
       {/* Filtros */}
       <TaskStatusFilter

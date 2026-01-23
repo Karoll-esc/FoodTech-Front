@@ -27,12 +27,20 @@ export const ProductCard = ({ product, isInOrder, onAdd }: ProductCardProps) => 
       `}
     >
       {/* Image */}
-      <div className="h-48 rounded-xl overflow-hidden relative">
-        <img 
-          alt={product.name} 
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-          src={product.image}
-        />
+      <div className="h-48 rounded-xl overflow-hidden relative bg-white/5">
+        {product.imageUrl ? (
+          <img
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            src={product.imageUrl}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <span className="material-symbols-outlined text-6xl text-silver-text/30">
+              restaurant
+            </span>
+          </div>
+        )}
         {isInOrder && (
           <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
             <span className="material-symbols-outlined text-primary text-4xl">check_circle</span>

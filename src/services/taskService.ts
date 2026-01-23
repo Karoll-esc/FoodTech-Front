@@ -17,13 +17,13 @@ class TaskService {
    * Obtiene todas las tareas de todas las estaciones
    */
   async getAllTasks(): Promise<Task[]> {
-    const [barTasks, hotTasks, coldTasks] = await Promise.all([
-      this.getTasksByStation(Station.BAR),
-      this.getTasksByStation(Station.HOT_KITCHEN),
-      this.getTasksByStation(Station.COLD_KITCHEN),
+    const [espressoTasks, pastryTasks, sandwichTasks] = await Promise.all([
+      this.getTasksByStation(Station.ESPRESSO_BAR),
+      this.getTasksByStation(Station.PASTRY_STATION),
+      this.getTasksByStation(Station.SANDWICH_STATION),
     ]);
 
-    return [...barTasks, ...hotTasks, ...coldTasks];
+    return [...espressoTasks, ...pastryTasks, ...sandwichTasks];
   }
 
   /**
